@@ -5,7 +5,8 @@ Uses the rank_bm25 library for scoring and ranking.
 
 from rank_bm25 import BM25Okapi
 from nltk.tokenize import word_tokenize
-from articles import retrieve_articles
+from articles import Articles
+
 import nltk
 nltk.download('punkt_tab')
 
@@ -25,23 +26,28 @@ def rank_articles(query, pages=2):
         list of tuples: [(url, score), ...] ranked from highest to lowest.
     """
     # Step 1: Retrieve articles
-    articles = retrieve_articles(query, pages=pages)
+    articles = Articles()
+    articles.retrieve_articles(query)
 
-    if not articles:
+    print("Articles info: ",articles._url_processedtext_dict.items())  # Debugging line
+
+    if not articles._url_processedtext_dict:
         print("No articles found.")
         return []
 
     # Step 2: Prepare corpus for BM25
-    corpus = [word_tokenize(text.lower()) for text in articles.values()]
+    urls = list(articles._url_processedtext_dict.keys())
+    corpus = list(articles._url_processedtext_dict.values())
+
     bm25 = BM25Okapi(corpus)
+    query_tokens = word_tokenize(query.lower())
 
     # Step 3: Compute scores
-    query_tokens = word_tokenize(query.lower())
     scores = bm25.get_scores(query_tokens)
 
     # Step 4: Rank URLs by score
     ranked_results = sorted(
-        zip(articles.keys(), scores),
+        zip(urls, scores),
         key=lambda x: x[1],
         reverse=True
     )
