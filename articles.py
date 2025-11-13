@@ -1,76 +1,100 @@
-"""
-news_retriever.py
------------------
-Fetches and parses news articles using the Currents API and Newspaper3k.
-Returns a dictionary mapping URLs to their extracted text.
-"""
-
 import requests
+import PorterStemmer
+from secrets import currents_api_key
 from newspaper import Article
-from api_keys import currents_api_key
 
+class Articles(object):
+    def __init__(self):
+        self._url_fulltext_dict = {}
+        self._url_processedtext_dict = {}
+        self._url_id_dict = {}
+        self._inverted_index = {}
 
-def retrieve_articles(keywords, pages=2):
-    """
-    Retrieve and parse news articles related to the given keywords.
+    def retrieve_articles(self, keywords):
+        # need to add code ensuring that keywords is a string
 
-    Args:
-        keywords (str): Search keywords for news retrieval.
-        pages (int): Number of API pages to fetch (default = 2).
+        # article id
+        article_id = 0
+        urls=[]
 
-    Returns:
-        dict: A dictionary mapping article URLs to their text content.
-    """
-    if not isinstance(keywords, str):
-        raise ValueError("`keywords` must be a string.")
+        #testing
+        print(f"Retrieving articles for keyword: {keywords}")
+        for page in range(1, 2):
+            params = {
+                "keywords": keywords,
+                "language": 'en',
+                "apiKey": currents_api_key,
+                "page_number": page
+            }
+            try:
+                response = requests.get('https://api.currentsapi.services/v1/search', params=params)
+                response.raise_for_status()
+                data = response.json()
 
-    url_text_dict = {}
+                # go thru news objects and retrieve urls
+                for news_item in data.get("news", []):
+                    # add url and paragraph text to dict if possible
+                    article_url = news_item.get('url')
+                    print(f"article url: {article_url}") # testing purposes
+                    urls.append(article_url)
+                    
+                # go thru urls and retrieve text
+                for url in urls:
+                    try:
+                        article = Article(url)
+                        article.download()
+                        article.parse()
+                        article_text = article.text # get article text
 
-    for page in range(1, pages + 1):
-        params = {
-            "keywords": keywords,
-            "language": "en",
-            "apiKey": currents_api_key,
-            "page_number": page
-        }
+                        # add url, paragraph text to dict
+                        self._url_fulltext_dict.setdefault(url, article_text)
+                        # add url, id to dict
+                        self._url_id_dict.setdefault(url, article_id)
+                        article_id += 1
 
-        try:
-            response = requests.get(
-                "https://api.currentsapi.services/v1/search",
-                params=params,
-                timeout=30
-            )
-            response.raise_for_status()
-            data = response.json()
+                        # tokenize text
+                        article_tokens = self.tokenize(article_text)
+                        # stem
+                        stemmed_article_tokens = self.stemming(article_tokens)
 
-            for news_item in data.get("news", []):
-                url = news_item.get("url")
-                if not url:
-                    continue
+                        # add url, processed text to dict
+                        self._url_processedtext_dict.setdefault(url, stemmed_article_tokens)
 
-                try:
-                    article = Article(url)
-                    article.download()
-                    article.parse()
-                    text = article.text.strip()
+                    except Exception as e:
+                        print(f"Skipping URL: {url} due to the following error: {e}")
+            except requests.exceptions.RequestException as e:
+                print(f"Error making API request: {e}")
+            except ValueError as e:
+                print(f"Error parsing JSON response: {e}")
+    def tokenize(self, text):
+        import re
+        clean_string = re.sub('[^a-z0-9 ]', ' ', text.lower())
+        tokens = clean_string.split()
+        return tokens
+    
+    def stemming(self, tokens):
+        stemmed_tokens = []
+        stemmer = PorterStemmer.PorterStemmer()
+        for token in tokens:
+            stemmed_token = stemmer.stem(token, 0, len(token)-1)
+            stemmed_tokens.append(stemmed_token)
+        return stemmed_tokens
+    
+    '''def create_index(self):
+        for url, text in self._url_processedtext_dict.items():
+            for item in text:
+                if item not in self._inverted_index:
+                    self._inverted_index.setdefault(item, set()).add(self._url_id_dict.get(url))
+                else:
+                    # if item already in dict what do
+                    self._inverted_index.setdefault(item, self._url)'''
 
-                    if text:
-                        url_text_dict[url] = text
-                except Exception as e:
-                    print(f"Skipping URL {url}: {e}")
+'''def main(args):
+    articles = Articles()
+    articles.retrieve_articles("taylor swift")
+    for url, text in articles._url_processedtext_dict.items():
+        print(f"Url: {url} \n Processed text: {text}")
 
-        except requests.exceptions.RequestException as e:
-            print(f"API request error on page {page}: {e}")
-        except ValueError as e:
-            print(f"Error parsing JSON on page {page}: {e}")
-
-    print(f"Retrieved {len(url_text_dict)} articles.")
-    return url_text_dict
-
-
-if __name__ == "__main__":
-    # Example usage
-    query = "AI-generated content"
-    articles = retrieve_articles(query, pages=2)
-    for i, (url, text) in enumerate(articles.items(), 1):
-        print(f"\n{i}. {url}\n{text[:400]}...\n")
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)'''
