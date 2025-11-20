@@ -15,10 +15,8 @@ class Articles(object):
 
         # article id
         article_id = 0
-        urls=[]
 
-        #testing
-        print(f"Retrieving articles for keyword: {keywords}")
+        # print(f"Retrieving articles for keyword: {keywords}") #testing
         for page in range(1, 2):
             params = {
                 "keywords": keywords,
@@ -35,21 +33,18 @@ class Articles(object):
                 for news_item in data.get("news", []):
                     # add url and paragraph text to dict if possible
                     article_url = news_item.get('url')
-                    print(f"article url: {article_url}") # testing purposes
-                    urls.append(article_url)
-                    
-                # go thru urls and retrieve text
-                for url in urls:
+                    #print(f"article url: {article_url}") # printing article urls for testing
+
                     try:
-                        article = Article(url)
+                        article = Article(article_url)
                         article.download()
                         article.parse()
                         article_text = article.text # get article text
 
                         # add url, paragraph text to dict
-                        self._url_fulltext_dict.setdefault(url, article_text)
+                        self._url_fulltext_dict.setdefault(article_url, article_text)
                         # add url, id to dict
-                        self._url_id_dict.setdefault(url, article_id)
+                        self._url_id_dict.setdefault(article_url, article_id)
                         article_id += 1
 
                         # tokenize text
@@ -58,10 +53,12 @@ class Articles(object):
                         stemmed_article_tokens = self.stemming(article_tokens)
 
                         # add url, processed text to dict
-                        self._url_processedtext_dict.setdefault(url, stemmed_article_tokens)
+                        self._url_processedtext_dict.setdefault(article_url, stemmed_article_tokens)
 
+                        # populate inverted index
+                        self.create_index()
                     except Exception as e:
-                        print(f"Skipping URL: {url} due to the following error: {e}")
+                        print(f"Skipping url: {article_url} due to the following error: {e}")
             except requests.exceptions.RequestException as e:
                 print(f"Error making API request: {e}")
             except ValueError as e:
@@ -80,21 +77,12 @@ class Articles(object):
             stemmed_tokens.append(stemmed_token)
         return stemmed_tokens
     
-    '''def create_index(self):
+    def create_index(self):
         for url, text in self._url_processedtext_dict.items():
+            article_id = self._url_id_dict.get(url)
             for item in text:
                 if item not in self._inverted_index:
-                    self._inverted_index.setdefault(item, set()).add(self._url_id_dict.get(url))
+                    self._inverted_index[item] = {article_id}
                 else:
-                    # if item already in dict what do
-                    self._inverted_index.setdefault(item, self._url)'''
-
-'''def main(args):
-    articles = Articles()
-    articles.retrieve_articles("taylor swift")
-    for url, text in articles._url_processedtext_dict.items():
-        print(f"Url: {url} \n Processed text: {text}")
-
-if __name__ == '__main__':
-    import sys
-    main(sys.argv)'''
+                    # if item already in dict add it to the dict's items
+                    self._inverted_index[item].add(article_id)

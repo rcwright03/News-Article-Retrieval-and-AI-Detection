@@ -9,5 +9,10 @@ def test_retrieve_articles():
         print(f"First 20 stemmed tokens: {tokens[:20]}")
         break
 
+    for token, ids in articles._inverted_index.items():
+        print(f"Token: {token}")
+        print(f"Article ids: {ids}")
+        break
+
 if __name__ == "__main__":
     test_retrieve_articles()
