@@ -14,7 +14,7 @@ nltk.download('punkt_tab')
 # nltk.download('punkt', quiet=True)
 
 
-def rank_articles(query, pages=2):
+def rank_articles(articles, query, pages=2):
     """
     Retrieve and rank articles using Okapi BM25.
 
@@ -26,7 +26,6 @@ def rank_articles(query, pages=2):
         list of tuples: [(url, score), ...] ranked from highest to lowest.
     """
     # Step 1: Retrieve articles
-    articles = Articles()
     articles.retrieve_articles(query)
 
     print("Articles info: ",articles._url_processedtext_dict.items())  # Debugging line
