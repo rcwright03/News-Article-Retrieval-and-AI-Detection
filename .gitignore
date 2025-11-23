@@ -32,3 +32,5 @@ frontend/frontend/
 frontend/src/src/
 api/.venv/
 frontend/.venv/
+__pycache__/
+*.pyc
