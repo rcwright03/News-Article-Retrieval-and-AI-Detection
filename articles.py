@@ -9,6 +9,7 @@ class Articles(object):
         self._url_processedtext_dict = {}
         self._url_id_dict = {}
         self._inverted_index = {}
+        self._url_aiperc_dict = {}
 
     def retrieve_articles(self, keywords):
         # need to add code ensuring that keywords is a string
@@ -86,3 +87,21 @@ class Articles(object):
                 else:
                     # if item already in dict add it to the dict's items
                     self._inverted_index[item].add(article_id)
+
+    def classify_text(self): # iterate thru top X articles and give their 'AI %'
+        # go thru top X articles - get their urls
+        for url, fulltext in self._url_fulltext_dict.items():
+            # go thru each line in fulltext and classify it
+            # if a newline is reached, go to the next line
+            # calculate 'AI %' by number of AI paragraphs / total number of paragraphs
+            for char in fulltext: # go thru each character in fulltext
+                paragraph += char
+                if char == '\n':
+                    # calculate whether paragraph is AI or not - takes from classify class
+                    if isAI:
+                        numAI += 1
+                    numParagraphs += 1
+                    paragraph = "" # clear paragraph
+            # add to url, AI% dict
+            ai_perc = numAI / numParagraphs
+            self._url_aiperc_dict[url].add(ai_perc)
