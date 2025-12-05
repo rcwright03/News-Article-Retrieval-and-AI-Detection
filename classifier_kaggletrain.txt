@@ -1,0 +1,96 @@
+AI class weight: 1.6854150295257568
+Epoch 1 | Train Loss: 0.1795 | Train Acc: 0.9420 | Val Loss: 0.0426 | Val Acc: 0.9908
+Epoch 2 | Train Loss: 0.0485 | Train Acc: 0.9874 | Val Loss: 0.0258 | Val Acc: 0.9946
+Epoch 3 | Train Loss: 0.0337 | Train Acc: 0.9912 | Val Loss: 0.0188 | Val Acc: 0.9961
+Epoch 4 | Train Loss: 0.0283 | Train Acc: 0.9926 | Val Loss: 0.0135 | Val Acc: 0.9971
+Epoch 5 | Train Loss: 0.0232 | Train Acc: 0.9940 | Val Loss: 0.0117 | Val Acc: 0.9973
+Epoch 6 | Train Loss: 0.0211 | Train Acc: 0.9944 | Val Loss: 0.0114 | Val Acc: 0.9976
+Epoch 7 | Train Loss: 0.0197 | Train Acc: 0.9948 | Val Loss: 0.0095 | Val Acc: 0.9978
+Epoch 8 | Train Loss: 0.0181 | Train Acc: 0.9952 | Val Loss: 0.0097 | Val Acc: 0.9977
+Epoch 9 | Train Loss: 0.0167 | Train Acc: 0.9956 | Val Loss: 0.0085 | Val Acc: 0.9981
+Epoch 10 | Train Loss: 0.0163 | Train Acc: 0.9956 | Val Loss: 0.0087 | Val Acc: 0.9978
+Epoch 11 | Train Loss: 0.0158 | Train Acc: 0.9957 | Val Loss: 0.0082 | Val Acc: 0.9981
+Epoch 12 | Train Loss: 0.0153 | Train Acc: 0.9959 | Val Loss: 0.0081 | Val Acc: 0.9982
+Epoch 13 | Train Loss: 0.0145 | Train Acc: 0.9962 | Val Loss: 0.0086 | Val Acc: 0.9981
+Epoch 14 | Train Loss: 0.0144 | Train Acc: 0.9962 | Val Loss: 0.0097 | Val Acc: 0.9981
+Early stopping.
+
+Training Performance
+Training Accuracy: 0.9991790409145485
+Training Classification Report:
+               precision    recall  f1-score   support
+
+         0.0       1.00      1.00      1.00    244638
+         1.0       1.00      1.00      1.00    145150
+
+    accuracy                           1.00    389788
+   macro avg       1.00      1.00      1.00    389788
+weighted avg       1.00      1.00      1.00    389788
+
+
+Validation Performance
+Validation Accuracy: 0.998163104046302
+Validation Classification Report:
+               precision    recall  f1-score   support
+
+         0.0       1.00      1.00      1.00     61159
+         1.0       1.00      1.00      1.00     36288
+
+    accuracy                           1.00     97447
+   macro avg       1.00      1.00      1.00     97447
+weighted avg       1.00      1.00      1.00     97447
+
+
+Test Performance
+Test Accuracy: 0.4362
+Test Classification Report:
+               precision    recall  f1-score   support
+
+         0.0       0.39      0.24      0.30      5000
+         1.0       0.45      0.64      0.53      5000
+
+    accuracy                           0.44     10000
+   macro avg       0.42      0.44      0.41     10000
+weighted avg       0.42      0.44      0.41     10000
+
+XGB:
+Training Performance
+Training Accuracy: 0.9897106441612126
+Training Classification Report:
+
+              precision    recall  f1-score   support
+
+           0       0.99      0.99      0.99    145150
+           1       0.99      0.99      0.99    145150
+
+    accuracy                           0.99    290300
+   macro avg       0.99      0.99      0.99    290300
+weighted avg       0.99      0.99      0.99    290300
+
+
+Validation Performance
+Validation Accuracy: 0.9888668430335097
+Validation Classification Report:
+
+              precision    recall  f1-score   support
+
+           0       0.99      0.99      0.99     36288
+           1       0.99      0.99      0.99     36288
+
+    accuracy                           0.99     72576
+   macro avg       0.99      0.99      0.99     72576
+weighted avg       0.99      0.99      0.99     72576
+
+
+Test Performance
+Test Accuracy: 0.4959
+Test Classification Report:
+
+              precision    recall  f1-score   support
+
+           0       0.35      0.01      0.02      5000
+           1       0.50      0.98      0.66      5000
+
+    accuracy                           0.50     10000
+   macro avg       0.42      0.50      0.34     10000
+weighted avg       0.42      0.50      0.34     10000
