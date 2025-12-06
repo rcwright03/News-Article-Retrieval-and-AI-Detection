@@ -28,7 +28,7 @@ def rank_articles(articles, query, pages=2):
     # Step 1: Retrieve articles
     articles.retrieve_articles(query)
 
-    print("Articles info: ",articles._url_processedtext_dict.items())  # Debugging line
+    # print("Articles info: ",articles._url_processedtext_dict.items())  # Debugging line
 
     if not articles._url_processedtext_dict:
         print("No articles found.")

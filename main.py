@@ -1,9 +1,9 @@
 from articles import Articles
 from bm25_ranker import rank_articles
 from sbert_reranker import SBERRanker
+from ai_detector import AIBertDetector
 
 def run_pipeline(query, K=10):
-    # Shared articles object
     articles = Articles()
 
     print(f"\nQuery: {query}\n")
@@ -24,9 +24,30 @@ def run_pipeline(query, K=10):
     sbert_results = reranker.rerank(query, top_k_urls, top_k_texts)
 
     print("\n=== Top SBERT Results ===")
-    for i, (url, _, score) in enumerate(sbert_results[:K], 1):
+    for i, (url, fulltext, score) in enumerate(sbert_results[:K], 1):
         print(f"{i}. {url} (Semantic={score:.4f})")
+        # print(f"   {fulltext[:200]}...\n")
 
+    # 4. AI Detector
+    detector = AIBertDetector("best_distilbert_model_CURRENT.pt")
+    print(f"\nLoaded threshold = {detector.threshold}")
+
+    print("\n=== AI Detection (Article-level) ===")
+    final_results = []
+
+    for url, fulltext, sem_score in sbert_results[:K]:
+    # ---- paragraph-based detection ----
+        ai_prob = detector.predict_proba(fulltext)
+        ai_pct  = detector.ai_percentage(fulltext)
+        para_probs = detector.paragraph_probs(fulltext)
+        # Add to results
+        final_results.append((url, sem_score, ai_prob, ai_pct, para_probs))
+
+
+    print("\n=== FINAL RESULTS ===")
+    for i, (url, sem, ai_prob, ai_pct, para_probs) in enumerate(final_results, 1):
+        print(f"{i}. {url}\n"
+              f"   Semantic={sem:.4f}, Paragraph_Prob = [{para_probs}], AI_prob={ai_prob:.4f}, AI%={ai_pct:.2%}")
 
 if __name__ == "__main__":
     query = input("Enter your news query: ")
