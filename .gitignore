@@ -207,3 +207,6 @@ marimo/_lsp/
 __marimo__/
 
 secrets.py
+secret_key.py
+__pycache__/
+*.pyc

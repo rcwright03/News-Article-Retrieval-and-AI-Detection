@@ -1,0 +1,5 @@
+rank_bm25 #for BM25 ranking algorithm
+nltk
+newspaper3k 
+requests
+lxml_html_clean
