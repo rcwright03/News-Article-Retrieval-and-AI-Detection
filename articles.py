@@ -88,7 +88,7 @@ class Articles(object):
                     # if item already in dict add it to the dict's items
                     self._inverted_index[item].add(article_id)
 
-    def classify_text(self): # iterate thru top X articles and give their 'AI %'
+    '''def classify_text(self): # iterate thru top X articles and give their 'AI %'
         # go thru top X articles - get their urls
         for url, fulltext in self._url_fulltext_dict.items():
             # go thru each line in fulltext and classify it
@@ -104,4 +104,4 @@ class Articles(object):
                     paragraph = "" # clear paragraph
             # add to url, AI% dict
             ai_perc = numAI / numParagraphs
-            self._url_aiperc_dict[url].add(ai_perc)
+            self._url_aiperc_dict[url].add(ai_perc)'''

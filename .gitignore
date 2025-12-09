@@ -208,5 +208,6 @@ __marimo__/
 
 secrets.py
 secret_key.py
+best_distilbert_model_CURRENT.pt
 __pycache__/
 *.pyc
