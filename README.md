@@ -18,7 +18,7 @@ Paste-in detectors, such as ZeroGPT, score text that the user provides. Our tool
 Classification Datasets
 - [AI Vs Human Text Dataset (Kaggle)](https://www.kaggle.com/datasets/shanegerami/ai-vs-human-text)
 - [AI Text Detection Pile (Hugging Face)](https://huggingface.co/datasets/artem9k/ai-text-detection-pile)
-- [Test Dataset (Al Bataineh et al., 2025)](https://github.com/rsickle1/human-v-ai)
+- [Out of Distribution Test Dataset (Al Bataineh et al., 2025)](https://github.com/rsickle1/human-v-ai)
 - Articles are dynamically retrieved with Currents News API
 
 Requirements
