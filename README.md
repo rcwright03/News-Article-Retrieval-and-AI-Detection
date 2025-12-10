@@ -1,0 +1,3 @@
+# R&D: News Retrieval and AI Detection
+## Overview
+Our tool, R&D, collects, analyzes, and ranks news articles from different sources based on a user's query. The system gathers relevant news articles from multiple sources. It ranks the retrieved articles with Okapi BM25 for the initial order. Then our tool reranks the top results using a SBERT bi-encoder reranker, which computes embeddings of the query and articles and orders them by cosine similarity to capture context. Each result shows an estimated AI authorship score generated from a classifier trained to distinguish human-written and AI-generated text.
