@@ -21,14 +21,14 @@ Classification Datasets
 - [Test Dataset (Al Bataineh et al., 2025)](https://github.com/rsickle1/human-v-ai)
 - Articles are dynamically retrieved with Currents News API
 Requirements
--PorterStemmer
--requests
--newspaper3k
--lxml_html_clean
--rank_bm25
--nltk
--sentence_transformers
--Torch
--transformers
--sklearn
+- PorterStemmer
+- requests
+- newspaper3k
+- lxml_html_clean
+- rank_bm25
+- nltk
+- sentence_transformers
+- Torch
+- transformers
+- sklearn
 -Numpy, pandas
